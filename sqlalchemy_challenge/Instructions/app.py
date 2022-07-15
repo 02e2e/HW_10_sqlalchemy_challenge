@@ -52,7 +52,6 @@ def precipitation():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of all passenger names"""
     # Query dates and prcp values 
     results = session.query(measurement.date,measurement.prcp)\
         .order_by(measurement.date).all()
@@ -75,7 +74,7 @@ def stations():
 
     session.close()
 
-    # Create a dictionary from the row data and append to a list of all_passengers
+
     # Convert list of tuples into normal list
     all_stations = list(np.ravel(results))
 
@@ -87,8 +86,7 @@ def tobs():
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-    """Return a list of all passenger names"""
-    # Query all passengers
+
     last_measurement = session.query(measurement.date).order_by(measurement.date.desc()).first().date
     last_date = dt.datetime.strptime(last_measurement, "%Y-%m-%d").date()
     start = last_date - dt.timedelta(days=365)
@@ -142,13 +140,9 @@ def temp_range_start_end(start, last_date):
     # Create our session (link) from Python to the DB
     session = Session(engine)
 
-     
     last_measurement = session.query(measurement.date).order_by(measurement.date.desc()).first().date
-    
     last_date = dt.datetime.strptime(last_measurement, "%Y-%m-%d").date()
-    
     start = last_date - dt.timedelta(days=365)
-    
     start_date = start.strftime("%Y-%m-%d")
     
     max = func.max(measurement.tobs)
@@ -159,12 +153,9 @@ def temp_range_start_end(start, last_date):
     .filter(measurement.date >= start_date)\
     .filter(measurement.date <= last_date).all()
 
-    
-
     session.close()    
     all_end = list(np.ravel(results))
     return jsonify(all_end)
-
 
 
 if __name__ == '__main__':
